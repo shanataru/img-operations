@@ -3,10 +3,19 @@
 import sys
 from PIL import Image, ImageTk
 import tkinter
+import my_neg
 
-def inv():
+def inv(orig):
 	#zmena statusu obrazku
 	statuslab.config(text='inverze')
+	
+	global canvas
+	global photo
+	
+	canvas.delete(photo)
+	img = my_neg.inverze(orig)
+	photo = ImageTk.PhotoImage(img)
+	canvas.itemconfigure(myimage, image=photo)
 
 def gray():
 	statuslab.config(text='odstín šedi')
@@ -55,7 +64,7 @@ img_w, img_h = img.size
 #zavedeni canvasu jako potomek hl. okna
 canvas = tkinter.Canvas(root, width=img_w, height=img_h)
 photo = ImageTk.PhotoImage(img)
-image = canvas.create_image((img_w,img_h), image=photo, anchor=tkinter.SE)
+myimage = canvas.create_image((img_w,img_h), image=photo, anchor=tkinter.SE)
 canvas.pack(side='left')
 
 #stitek pod obrazkem
@@ -68,7 +77,7 @@ lab.pack(side="top", anchor="center")
 statuslab.pack(side='top')
 
 #tlacitka pro jednotlive operace
-inv_b = tkinter.Button(root, text="Inverze", width=17, height=1, command=inv)
+inv_b = tkinter.Button(root, text="Inverze", width=17, height=1, command=lambda: inv(img))
 inv_b.pack(padx=8, pady=3)
 gray_b = tkinter.Button(root, text="Odstín šedi", width=17, height=1, command=gray)
 gray_b.pack(padx=8, pady=3)
@@ -89,6 +98,8 @@ motion_b.pack(padx=8, pady=3)
 #save_b.pack(padx=8, pady=10, side='bottom')
 reset_b = tkinter.Button(root, text="Reset", width=17, height=1, command=reset)
 reset_b.pack(padx=8, pady=20, side='bottom')
+
+
 
 root.mainloop()
 
