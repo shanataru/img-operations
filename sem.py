@@ -4,27 +4,59 @@ import sys
 from PIL import Image, ImageTk
 import tkinter
 import my_neg
+import gray_np
+import my_light
+import my_dark
 
 def inv(orig):
 	#zmena statusu obrazku
 	statuslab.config(text='inverze')
 	
+	#jde videt mimo funkci...
 	global canvas
 	global photo
-	
+
+	#smazu dosavadni obrazek	
 	canvas.delete(photo)
+	
+	#operace z import. skriptu
 	img = my_neg.inverze(orig)
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
 
-def gray():
+def gray(orig):
 	statuslab.config(text='odstín šedi')
 
-def light():
-	statuslab.config(text='zesvětlení')
+	global canvas
+	global photo
 
-def dark():
+	canvas.delete(photo)
+	img = gray_np.grayscale(orig)
+	photo = ImageTk.PhotoImage(img)
+	canvas.itemconfigure(myimage, image=photo)
+
+def light(orig):
+	statuslab.config(text='zesvětlení')
+	
+	global canvas
+	global photo
+
+	canvas.delete(photo)
+	img = my_light.lighten(orig)
+	photo = ImageTk.PhotoImage(img)
+	canvas.itemconfigure(myimage, image=photo)
+
+def dark(orig):
 	statuslab.config(text='ztmavení')
+
+	global canvas
+	global photo
+
+	canvas.delete(photo)
+	img = my_dark.darken(orig)
+	photo = ImageTk.PhotoImage(img)
+	canvas.itemconfigure(myimage, image=photo)
+
 
 def edge():
 	statuslab.config(text='detekce hran')
@@ -79,19 +111,26 @@ statuslab.pack(side='top')
 #tlacitka pro jednotlive operace
 inv_b = tkinter.Button(root, text="Inverze", width=17, height=1, command=lambda: inv(img))
 inv_b.pack(padx=8, pady=3)
-gray_b = tkinter.Button(root, text="Odstín šedi", width=17, height=1, command=gray)
+
+gray_b = tkinter.Button(root, text="Odstín šedi", width=17, height=1, command=lambda: gray(img))
 gray_b.pack(padx=8, pady=3)
-light_b = tkinter.Button(root, text="Zesvětlení", width=17, height=1, command=light)
+
+light_b = tkinter.Button(root, text="Zesvětlení", width=17, height=1, command=lambda: light(img))
 light_b.pack(padx=8, pady=3)
-dark_b = tkinter.Button(root, text="Ztmavení", width=17, height=1, command=dark)
+
+dark_b = tkinter.Button(root, text="Ztmavení", width=17, height=1, command=lambda: dark(img))
 dark_b.pack(padx=8, pady=3)
-edge_b = tkinter.Button(root, text="Detekce hran", width=17, height=1, command=edge)
+
+edge_b = tkinter.Button(root, text="Detekce hran", width=17, height=1, command=lambda: edge)
 edge_b.pack(padx=8, pady=3)
-emboss_b = tkinter.Button(root, text="Emboss", width=17, height=1, command=emboss)
+	
+emboss_b = tkinter.Button(root, text="Emboss", width=17, height=1, command=lambda: emboss)
 emboss_b.pack(padx=8, pady=3)
-sharp_b = tkinter.Button(root, text="Ostření", width=17, height=1, command=sharp)
+
+sharp_b = tkinter.Button(root, text="Ostření", width=17, height=1, command=lambda: sharp)
 sharp_b.pack(padx=8, pady=3)
-motion_b = tkinter.Button(root, text="Motion blur", width=17, height=1, command=motion)
+
+motion_b = tkinter.Button(root, text="Motion blur", width=17, height=1, command=lambda: motion)
 motion_b.pack(padx=8, pady=3)
 
 #save_b = tkinter.Button(root, text="Uložit obrázek", width=17, height=1, command=...)
