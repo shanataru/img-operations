@@ -7,6 +7,9 @@ import my_neg
 import gray_np
 import my_light
 import my_dark
+import my_edges
+import my_sharp
+import mot_blur
 
 def inv(orig):
 	#zmena statusu obrazku
@@ -58,22 +61,47 @@ def dark(orig):
 	canvas.itemconfigure(myimage, image=photo)
 
 
-def edge():
+def edge(orig):
 	statuslab.config(text='detekce hran')
 
+	global canvas
+	global photo
+
+	canvas.delete(photo)
+	img = my_edges.edge_detect(orig)
+	photo = ImageTk.PhotoImage(img)
+	canvas.itemconfigure(myimage, image=photo)
+
 def emboss():
+
 	statuslab.config(text='emboss')
 
-def sharp():
+def sharp(orig):
 	statuslab.config(text='ostření')
 
-def motion():
+	global canvas
+	global photo
+
+	canvas.delete(photo)
+	img = my_sharp.sharpen(orig)
+	photo = ImageTk.PhotoImage(img)
+	canvas.itemconfigure(myimage, image=photo)
+
+def motion(orig):
 	statuslab.config(text='motion blur')
+
+	global canvas
+	global photo
+
+	canvas.delete(photo)
+	img = mot_blur.mb(orig)
+	photo = ImageTk.PhotoImage(img)
+	canvas.itemconfigure(myimage, image=photo)
 
 def reset():
 	statuslab.config(text='originál')
 	
-
+	
 if len(sys.argv) == 1:
 	print('Zadejte cestu k obrazku jako argument skriptu.')
 	exit()
@@ -121,16 +149,16 @@ light_b.pack(padx=8, pady=3)
 dark_b = tkinter.Button(root, text="Ztmavení", width=17, height=1, command=lambda: dark(img))
 dark_b.pack(padx=8, pady=3)
 
-edge_b = tkinter.Button(root, text="Detekce hran", width=17, height=1, command=lambda: edge)
+edge_b = tkinter.Button(root, text="Detekce hran", width=17, height=1, command=lambda: edge(img))
 edge_b.pack(padx=8, pady=3)
 	
-emboss_b = tkinter.Button(root, text="Emboss", width=17, height=1, command=lambda: emboss)
+emboss_b = tkinter.Button(root, text="Emboss", width=17, height=1, command=lambda: emboss(img))
 emboss_b.pack(padx=8, pady=3)
 
-sharp_b = tkinter.Button(root, text="Ostření", width=17, height=1, command=lambda: sharp)
+sharp_b = tkinter.Button(root, text="Ostření", width=17, height=1, command=lambda: sharp(img))
 sharp_b.pack(padx=8, pady=3)
 
-motion_b = tkinter.Button(root, text="Motion blur", width=17, height=1, command=lambda: motion)
+motion_b = tkinter.Button(root, text="Motion blur", width=17, height=1, command=lambda: motion(img))
 motion_b.pack(padx=8, pady=3)
 
 #save_b = tkinter.Button(root, text="Uložit obrázek", width=17, height=1, command=...)
