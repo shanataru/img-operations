@@ -10,6 +10,7 @@ import my_dark
 import my_edges
 import my_sharp
 import mot_blur
+import my_emboss
 
 def inv(orig):
 	#zmena statusu obrazku
@@ -72,9 +73,18 @@ def edge(orig):
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
 
-def emboss():
-
+def emboss(orig):
 	statuslab.config(text='emboss')
+
+	global canvas
+	global photo
+
+	canvas.delete(photo)
+	img = my_emboss.emboss(orig)
+	img2 = gray_np.grayscale(img) #grayscaled bump map
+	photo = ImageTk.PhotoImage(img2)
+	#photo = ImageTk.PhotoImage(img) #RGB
+	canvas.itemconfigure(myimage, image=photo)
 
 def sharp(orig):
 	statuslab.config(text='ostření')
@@ -98,10 +108,18 @@ def motion(orig):
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
 
-def reset():
+def reset(orig):
 	statuslab.config(text='originál')
 	
+	global canvas
+	global photo
+
+	canvas.delete(photo)
+	photo = ImageTk.PhotoImage(orig)
+	canvas.itemconfigure(myimage, image=photo)
 	
+
+
 if len(sys.argv) == 1:
 	print('Zadejte cestu k obrazku jako argument skriptu.')
 	exit()
@@ -163,7 +181,7 @@ motion_b.pack(padx=8, pady=3)
 
 #save_b = tkinter.Button(root, text="Uložit obrázek", width=17, height=1, command=...)
 #save_b.pack(padx=8, pady=10, side='bottom')
-reset_b = tkinter.Button(root, text="Reset", width=17, height=1, command=reset)
+reset_b = tkinter.Button(root, text="Reset", width=17, height=1, command=lambda: reset(img))
 reset_b.pack(padx=8, pady=20, side='bottom')
 
 
