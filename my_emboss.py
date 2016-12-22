@@ -25,5 +25,6 @@ def emboss(orig):
 	data_w, data_h, data_b = data.shape
 	#aplikace masky
 	emb = mask_app(data, data_b, data_h, data_w, maska)
+	emb = np.clip(emb, 0, 255)
 	img_out = Image.fromarray(np.asarray(emb, dtype=np.uint8), 'RGB')
 	return img_out
