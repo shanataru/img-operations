@@ -2,6 +2,7 @@
 
 import sys
 from PIL import Image, ImageTk
+from tkinter import filedialog
 import tkinter
 import my_neg
 import gray_np
@@ -12,6 +13,8 @@ import my_sharp
 import mot_blur
 import my_emboss
 
+global current_img
+
 def inv(orig):
 	#zmena statusu obrazku
 	statuslab.config(text='inverze')
@@ -19,6 +22,7 @@ def inv(orig):
 	#jde videt mimo funkci...
 	global canvas
 	global photo
+	global current_img
 
 	#smazu dosavadni obrazek	
 	canvas.delete(photo)
@@ -27,86 +31,110 @@ def inv(orig):
 	img = my_neg.inverze(orig)
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
+	current_img = img
+	save_b.config(state = 'normal')
 
 def gray(orig):
 	statuslab.config(text='odstín šedi')
 
 	global canvas
 	global photo
+	global current_img
 
 	canvas.delete(photo)
 	img = gray_np.grayscale(orig)
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
+	current_img = img
+	save_b.config(state = 'normal')
 
 def light(orig):
 	statuslab.config(text='zesvětlení')
 	
 	global canvas
 	global photo
+	global current_img
 
 	canvas.delete(photo)
 	img = my_light.lighten(orig)
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
+	current_img = img
+	save_b.config(state = 'normal')
 
 def dark(orig):
 	statuslab.config(text='ztmavení')
 
 	global canvas
 	global photo
+	global current_img
 
 	canvas.delete(photo)
 	img = my_dark.darken(orig)
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
-
+	current_img = img
+	save_b.config(state = 'normal')
 
 def edge(orig):
 	statuslab.config(text='detekce hran')
 
 	global canvas
 	global photo
+	global current_img
 
 	canvas.delete(photo)
 	img = my_edges.edge_detect(orig)
+	#img2 = gray_np.grayscale(img) #grayscaled
+	#photo = ImageTk.PhotoImage(img2)
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
+	current_img = img
+	save_b.config(state = 'normal')
 
 def emboss(orig):
 	statuslab.config(text='emboss')
 
 	global canvas
 	global photo
+	global current_img
 
 	canvas.delete(photo)
 	img = my_emboss.emboss(orig)
-	img2 = gray_np.grayscale(img) #grayscaled bump map
-	photo = ImageTk.PhotoImage(img2)
-	#photo = ImageTk.PhotoImage(img) #RGB
+	#img2 = gray_np.grayscale(img) #grayscaled bump map
+	#photo = ImageTk.PhotoImage(img2)
+	photo = ImageTk.PhotoImage(img) #RGB
 	canvas.itemconfigure(myimage, image=photo)
+	current_img = img
+	save_b.config(state = 'normal')
 
 def sharp(orig):
 	statuslab.config(text='ostření')
 
 	global canvas
 	global photo
+	global current_img
 
 	canvas.delete(photo)
 	img = my_sharp.sharpen(orig)
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
+	current_img = img
+	save_b.config(state = 'normal')
 
 def motion(orig):
 	statuslab.config(text='motion blur')
 
 	global canvas
 	global photo
+	global current_img
 
 	canvas.delete(photo)
 	img = mot_blur.mb(orig)
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
+	current_img = img
+	save_b.config(state = 'normal')
 
 def reset(orig):
 	statuslab.config(text='originál')
@@ -117,8 +145,13 @@ def reset(orig):
 	canvas.delete(photo)
 	photo = ImageTk.PhotoImage(orig)
 	canvas.itemconfigure(myimage, image=photo)
-	
+	save_b.config(state = 'disabled')
 
+def save_img():
+	name = filedialog.asksaveasfile(mode='bw',defaultextension='.png')
+	current_img.save(name, format='PNG')
+
+""" """
 
 if len(sys.argv) == 1:
 	print('Zadejte cestu k obrazku jako argument skriptu.')
@@ -142,6 +175,7 @@ img_w, img_h = img.size
 #zavedeni canvasu jako potomek hl. okna
 canvas = tkinter.Canvas(root, width=img_w, height=img_h)
 photo = ImageTk.PhotoImage(img)
+current_img = img
 myimage = canvas.create_image((img_w,img_h), image=photo, anchor=tkinter.SE)
 canvas.pack(side='left')
 
@@ -179,8 +213,10 @@ sharp_b.pack(padx=8, pady=3)
 motion_b = tkinter.Button(root, text="Motion blur", width=17, height=1, command=lambda: motion(img))
 motion_b.pack(padx=8, pady=3)
 
-#save_b = tkinter.Button(root, text="Uložit obrázek", width=17, height=1, command=...)
-#save_b.pack(padx=8, pady=10, side='bottom')
+save_b = tkinter.Button(root, text="Uložit obrázek", width=17, height=1, command=lambda: save_img())
+save_b.pack(padx=8, pady=10, side='bottom')
+save_b.config(state = 'disabled')
+
 reset_b = tkinter.Button(root, text="Reset", width=17, height=1, command=lambda: reset(img))
 reset_b.pack(padx=8, pady=20, side='bottom')
 
