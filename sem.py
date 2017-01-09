@@ -16,10 +16,16 @@ import my_emboss
 global current_img
 
 def inv(orig):
+	""" 
+	Funkce ocekava na vstupu obrazek a vytvori jeho inverzi pouzitim importovaneho modulu my_neg.
+	Prepise se text ve 'status label'.
+	Vysledny obrazek se zobrazi na canvas.
+	Aktivuje se tlacitko pro ukladani.
+	"""
+
 	#zmena statusu obrazku
 	statuslab.config(text='inverze')
-	
-	#jde videt mimo funkci...
+
 	global canvas
 	global photo
 	global current_img
@@ -32,6 +38,7 @@ def inv(orig):
 	photo = ImageTk.PhotoImage(img)
 	canvas.itemconfigure(myimage, image=photo)
 	current_img = img
+
 	save_b.config(state = 'normal')
 
 def gray(orig):
@@ -137,6 +144,10 @@ def motion(orig):
 	save_b.config(state = 'normal')
 
 def reset(orig):
+	"""
+	Funkce zobrazi vstupni obrazek bez jakekoliv modifikace.
+	Deaktivuje se tlacitko pro ukladani.
+	"""
 	statuslab.config(text='originál')
 	
 	global canvas
@@ -148,10 +159,24 @@ def reset(orig):
 	save_b.config(state = 'disabled')
 
 def save_img():
-	name = filedialog.asksaveasfile(mode='bw',defaultextension='.png')
-	current_img.save(name, format='PNG')
+	"""
+	Funkce uklada aktualne zobrazeny obrazek na canvasu (current_img).
+	Zobrazi se dialogove okno pro zvoleni mista ulozeni. 
+	Implicitne se obrazek ulozi ve formatu '.png'.
+	"""
 
-""" """
+	try:	
+		name = filedialog.asksaveasfile(mode='bw',defaultextension='.png')
+		current_img.save(name, format='PNG')
+	except:
+		...
+
+
+""" 
+Program ocekava cestu k obrazku, ktery ma otevrit a nadale upravovat.
+Program skonci pri zadani neplatne (a nebo zadne) cesty k obrazku.
+Kdyz je vice argumentu na vstupu, ignoruje vsechny krome prvniho.
+"""
 
 if len(sys.argv) == 1:
 	print('Zadejte cestu k obrazku jako argument skriptu.')
@@ -179,7 +204,7 @@ current_img = img
 myimage = canvas.create_image((img_w,img_h), image=photo, anchor=tkinter.SE)
 canvas.pack(side='left')
 
-#stitek pod obrazkem
+#stitek pod obrazkem (status label)
 status_text = 'originál'
 label_text = arg + '  ' + str(img_w) + 'x' + str(img_h)
 lab = tkinter.Label(root, text=label_text)
@@ -188,7 +213,13 @@ statuslab = tkinter.Label(root, text=status_text, fg='blue', pady=10)
 lab.pack(side="top", anchor="center")
 statuslab.pack(side='top')
 
-#tlacitka pro jednotlive operace
+
+"""
+Program provadi operace nad obrazkem podle stisku jednotlivych tlacitek.
+Do jednotlivych funkci se posila originalni obrazek, ktery byl vstupnim argumentem skriptu,
+	jednotlive operace se nedaji na sebe 'vrstvit'.
+"""
+
 inv_b = tkinter.Button(root, text="Inverze", width=17, height=1, command=lambda: inv(img))
 inv_b.pack(padx=8, pady=3)
 
@@ -219,7 +250,6 @@ save_b.config(state = 'disabled')
 
 reset_b = tkinter.Button(root, text="Reset", width=17, height=1, command=lambda: reset(img))
 reset_b.pack(padx=8, pady=20, side='bottom')
-
 
 
 root.mainloop()
