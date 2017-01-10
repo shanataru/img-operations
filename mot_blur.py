@@ -15,6 +15,11 @@ def mask_app(data, data_b, data_h, data_w, maska):
 				mblur[x-1, y-1, z] = ((vyrez * maska).sum()) * 1/3
 	return mblur	
 
+"""
+Funkce 'mb' vraci rozmazany obrazek (img_out).
+Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+"""
+
 def mb(orig):
 	data = np.asarray(orig, dtype=np.float)
 	#maska, matice

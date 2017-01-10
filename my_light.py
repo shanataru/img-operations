@@ -4,6 +4,11 @@
 import numpy as np
 from PIL import Image
 
+"""
+Funkce 'lighten' vraci zesvetleny obrazek (out).
+Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+"""
+
 def lighten(orig):
 	data = np.asarray(orig, dtype=np.uint16)
 	light = data * 3

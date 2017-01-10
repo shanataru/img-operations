@@ -14,6 +14,10 @@ def mask_app(data, data_b, data_h, data_w, maska):
 				edges[x-2, y-2, z] = (vyrez * maska).sum()
 	return edges
 
+"""
+Funkce 'edge_detect' vraci detekovane hrany v obrazku (img_out).
+Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+"""
 
 def edge_detect(orig):
 	data = np.asarray(orig, dtype=np.float) #chci s tim pocitat, float

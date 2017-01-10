@@ -15,6 +15,11 @@ def mask_app(data, data_h, data_w, maska):
 				out[x-1, y-1, z] = (vyrez * maska).sum()
 	return out
 
+"""
+Funkce 'sharpen' vraci zostreny obrazek (img_out).
+Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+"""
+
 def sharpen(orig):
 	data = np.asarray(orig, dtype=np.float) #chci s tim pocitat, float
 	maska = np.array( [ 

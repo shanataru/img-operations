@@ -3,6 +3,11 @@
 import numpy as np
 from PIL import Image
 
+"""
+Funkce 'grayscale' vraci upraveny obrazek (out) v odstinu sede.
+Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+"""
+
 def grayscale(orig):
 	data = np.asarray(orig, dtype=np.float)
 	gray = np.dot(data, [0.299, 0.587, 0.114])

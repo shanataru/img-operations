@@ -14,6 +14,11 @@ def mask_app(data, data_b, data_h, data_w, maska):
 				emb[x-1, y-1, z] = ((vyrez * maska).sum()) +128 #bias
 	return emb	
 
+"""
+Funkce 'emboss' vraci emboss obrazku (img_out).
+Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+"""
+
 def emboss(orig):
 	data = np.asarray(orig, dtype=np.float)
 	#maska, matice
