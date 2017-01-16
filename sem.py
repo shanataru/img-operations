@@ -5,12 +5,12 @@ from PIL import Image, ImageTk
 from tkinter import filedialog
 import tkinter
 import my_neg
-import gray_np
+import my_gray
 import my_light
 import my_dark
 import my_edges
 import my_sharp
-import mot_blur
+import my_mot_blur
 import my_emboss
 
 
@@ -32,7 +32,7 @@ def operation(orig, op):
 		img = my_neg.inverze(orig)
 	elif (op == 1): #odstin sede
 		statuslab.config(text='odstín šedi')
-		img = gray_np.grayscale(orig)
+		img = my_gray.grayscale(orig)
 	elif (op == 2): #zesvetleni
 		statuslab.config(text='zesvětlení')
 		img = my_light.lighten(orig)
@@ -42,19 +42,19 @@ def operation(orig, op):
 	elif (op == 4): #detekce hran
 		statuslab.config(text='detekce hran')
 		img = my_edges.edge_detect(orig)
-		#img2 = gray_np.grayscale(img) #grayscaled
+		#img2 = my_gray.grayscale(img) #grayscaled
 		#photo = ImageTk.PhotoImage(img2)
 	elif (op == 5): #emboss
 		statuslab.config(text='emboss')
 		img = my_emboss.emboss(orig)
-		#img2 = gray_np.grayscale(img) #grayscaled bump map
+		#img2 = my_gray.grayscale(img) #grayscaled
 		#photo = ImageTk.PhotoImage(img2)
 	elif (op == 6): #ostreni
 		statuslab.config(text='ostření')
 		img = my_sharp.sharpen(orig)
 	else: #motion blur
 		statuslab.config(text='motion blur')
-		img = mot_blur.mb(orig)
+		img = my_mot_blur.mb(orig)
 	
 	canvas.delete(photo)	
 	photo = ImageTk.PhotoImage(img)
@@ -99,8 +99,8 @@ Pokud je vice argumentu na vstupu, ignoruje vsechny krome prvniho.
 """
 
 if len(sys.argv) == 1:
-	print('Zadejte jmeno obrazku (nebo cestu, pokud neni v aktualnim adresari) jako argument skriptu.')
-	exit()
+	print('Zadejte jmeno obrazku (nebo cestu, pokud neni v aktualnim adresari) jako argument skriptu.\nNapr. \'./sem.py lenna.png\'')
+	sys.exit()
 
 #obrazek predan argumentem skriptu
 arg = sys.argv[1]
@@ -113,7 +113,7 @@ try:
 	img = Image.open(arg)
 except:
 	print('Obrazek nelze otevrit nebo neexistuje.')
-	exit()
+	sys.exit()
 
 img_w, img_h = img.size
 
