@@ -1,13 +1,11 @@
-#!/usr/bin/python3
-
 import numpy as np
 from PIL import Image
 from numba import jit
 
-#dekorator pro zrychleni; numba
+#decorator for performance; numba
 @jit
 def mask_app(data, data_h, data_w, maska):
-	out = np.zeros([data_w-2, data_h-2, 3])
+	out = np.zeros((data_w-2, data_h-2, 3))
 	for z in range(3):
 		for y in range(1, data_h-1):
 			for x in range(1, data_w-1):
@@ -16,18 +14,16 @@ def mask_app(data, data_h, data_w, maska):
 	return out
 
 """
-Funkce 'sharpen' vraci zostreny obrazek (img_out).
-Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+Parameter of this function is an image opened by PIL.
 """
-
 def sharpen(orig):
-	data = np.asarray(orig, dtype=np.float) #chci s tim pocitat, float
+	data = np.asarray(orig, dtype=np.float64) 
 	maska = np.array( [ 
 				[-1, -1, -1],
 				[-1, 9, -1], 
 				[-1, -1, -1] ] )
 
-	#silnejsi maska ostreni
+	# stronger sharpen mask
 	#maska = np.array( [
 	#				[1, 1, 1],
 	#				[1, -7, 1], 
@@ -38,6 +34,6 @@ def sharpen(orig):
 	#aplikace masky
 	sharp = mask_app(data, data_h, data_w, maska)
 	sharp = np.clip(sharp, 0, 255)
-	#ulozeni obrazku
+	# save
 	img_out = Image.fromarray(np.asarray(sharp, dtype=np.uint8), 'RGB')
 	return img_out

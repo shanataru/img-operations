@@ -1,12 +1,10 @@
-#!/usr/bin/python3
-
 import numpy as np
 from PIL import Image
 from numba import jit
 
 @jit
 def mask_app(data, data_b, data_h, data_w, maska):
-	mblur = np.zeros([data_w-2, data_h-2, data_b])
+	mblur = np.zeros((data_w-2, data_h-2, data_b))
 	for z in range(data_b): #pro kazdou slozku
 		for y in range(1, data_h-1): #x y 
 			for x in range(1, data_w-1):
@@ -16,12 +14,11 @@ def mask_app(data, data_b, data_h, data_w, maska):
 	return mblur	
 
 """
-Funkce 'mb' vraci rozmazany obrazek (img_out).
-Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+Parameter of this function is an image opened by PIL.
 """
 
 def mb(orig):
-	data = np.asarray(orig, dtype=np.float)
+	data = np.asarray(orig, dtype=np.float64)
 	#maska, matice
 	maska = np.array( [ 
 				[1, 0, 0],
@@ -29,7 +26,7 @@ def mb(orig):
 				[0, 0, 1] ] )
 
 	data_w, data_h, data_b = data.shape
-#aplikace masky
+	#aplikace masky
 	mblur = mask_app(data, data_b, data_h, data_w, maska)
 	img_out = Image.fromarray(np.asarray(mblur, dtype=np.uint8), 'RGB')
 	return img_out

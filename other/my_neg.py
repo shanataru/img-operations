@@ -1,11 +1,8 @@
-#!/usr/bin/python3
-
 import numpy as np
 from PIL import Image
 
 """
-Funkce 'inverze' vraci upraveny obrazek (out) v inverznich barvach.
-Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+Parameter of this function is an image opened by PIL.
 """
 
 def inverze(orig):

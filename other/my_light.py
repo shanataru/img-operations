@@ -1,12 +1,8 @@
-#!/usr/bin/python3
-
-#zesvetleni obrazku
 import numpy as np
 from PIL import Image
 
 """
-Funkce 'lighten' vraci zesvetleny obrazek (out).
-Parametrem funkce je originalni obrazek (orig) otevreny pomoci PIL.
+Parameter of this function is an image opened by PIL.
 """
 
 def lighten(orig):
